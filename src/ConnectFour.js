@@ -4,10 +4,11 @@ import './ConnectFour.css';
 import { players } from './players';
 
 let nextPlayerNumber = 1;
+let numberOfCoins = 0;
 
 export const ConnectFour = () => {
     const [currentPlayer, setCurrentPlayer] = useState(players[0]);
-
+    
     const getNextPlayer = () => {
         const nextPlayerIndex = nextPlayerNumber % players.length;
         nextPlayerNumber ++;
@@ -15,29 +16,17 @@ export const ConnectFour = () => {
     }
 
     const handleCoinFallen = board => {
-        if (isBoardFull(board)) {
-            alert(`The board is full, restarting...`);
-            window.location.reload();
-        }
+        numberOfCoins ++;
         const winner = checkBoard(board)
         if (winner) {
             alert(`${winner.name} won!`);
             window.location.reload();
+        } else if (numberOfCoins === board.length * board[0].length) {
+            alert(`The board is full, restarting...`);
+            window.location.reload();
         } else {
             setCurrentPlayer(getNextPlayer());
         }
-    }
-
-    const isBoardFull = board => {
-        let filledCells = 0;
-        for (let i = 0; i < board.length; i ++) {
-            for (let j = 0; j < board[i].length; j ++) {
-                if (board[i][j] !== 0) {
-                    filledCells++;
-                }
-            }
-        }
-        return filledCells === board.length * board[0].length;
     }
 
     const checkBoard = board => {
