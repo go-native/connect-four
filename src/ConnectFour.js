@@ -8,7 +8,6 @@ let numberOfCoins = 0;
 
 export const ConnectFour = () => {
     const [currentPlayer, setCurrentPlayer] = useState(players[0]);
-    
     const getNextPlayer = () => {
         const nextPlayerIndex = nextPlayerNumber % players.length;
         nextPlayerNumber ++;
@@ -30,38 +29,27 @@ export const ConnectFour = () => {
     }
 
     const checkBoard = board => {
-        let count = 0;
-        for (let i = 0; i < board.length; i ++) {
-            count = 0;
-            for (let j = 1; j < board[i].length; j ++) {
-                if (board[i][j] !== 0) {
-                    if (board[i][j] === board[i][j - 1]) {
-                        count ++;
-                    } else {
-                        count = 0;
+        for (let row = 0; row < board.length; row ++) {
+            for (let col = 0; col < board[row].length; col ++) {
+                const element = board[row][col]
+                if (element !== 0) {
+                    // check horizontally
+                    if (col <= board[row].length - 4 && element === board[row][col + 1] && element === board[row][col + 2]  && element === board[row][col + 3]) {
+                        return players.find(p => p.type === element);
                     }
-                }
-                if (count === 3) {
-                    return players.find(p => p.type === board[i][j]);
-                }
-            }
-        }
 
-        for (let i = 0; i < board[0].length; i ++) {
-            count = 0
-            for (let j = 1; j < board.length; j ++ ) {
-                if (board[j][i] !== 0) {
-                    if (board[j][i] === board[j - 1][i]) {
-                        count ++;
-                    } else {
-                        count = 0;
+                    // check vertically
+                    if ( row <= board.length - 4 && element === board[row + 1][col] && element === board[row + 2][col] && element === board[row + 3][col]) {
+                        return players.find(p => p.type === element);
                     }
-                }
-                if (count === 3) {
-                    return players.find(p => p.type === board[j][i]);
+                    // check diagonal
+                    if (row <= board.length - 4 &&  col <= board[row].length - 4 && element === board[row + 1][col + 1]  && element === board[row + 2][col + 2]  && element === board[row + 3][col + 3]) {
+                        return players.find(p => p.type === element);
+                    }
                 }
             }
         }
+        return null;
 
     }
 
